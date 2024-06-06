@@ -1,11 +1,11 @@
 ! T his is a program that will display the dimentions of a shape
-! It will display the area, volume, height, circumfrence, diameter and radius(if applicable)
+! It will display the area, volume, height, circumference, diameter and radius(if applicable)
 ! Israel Ogwu 05/25/2024
 
 program shapes
 implicit none
 
-real :: area, volume, height, circumfrence, diameter, radius, pi, length, width !variables needed
+real :: area, volume, height, circumference, diameter, radius, pi, length, width !variables needed
 character :: needs
 print *, "Welcome to the Shape Calculator! This program will help you calculate the dimentions of a shape! Press Enter to conntiue!"
 read (*,*)
@@ -27,7 +27,7 @@ if(needs == 'Y' .or. needs == 'y') then
     area = 4 * pi * radius * radius
     circumfrence = 2 * pi * radius
     
-    print *, "Your dimensions are: Area: ", area, "Circumfrence: ", circumfrence, "Diameter: ", diameter
+    print *, "Your dimensions are: Area: ", area, "Circumference: ", circumference, "Diameter: ", diameter
     else
         print *, "Enter length, width and height(in this order)"
         read *, length, width, height
