@@ -1,52 +1,76 @@
-! T his is a program that will display the dimentions of a shape
+! This is a program that will display the dimentions of a shape
 ! It will display the area, volume, height, circumfrence, diameter and radius(if applicable)
 ! Israel Ogwu 05/25/2024
 
 program shapes
 implicit none
 
-real :: area, volume, height, circumfrence, diameter, radius, pi, length, width !variables needed
+!variables needed
+real :: area, volume, height, circumfrence, diameter, radius, pi, length, width 
+integer :: i, ierr
 character :: needs
-print *, "Welcome to the Shape Calculator! This program will help you calculate the dimentions of a shape! Press Enter to conntiue!"
-read (*,*)
-print *, "First thing's first!(enter)"
-read (*,*)
-print *, "If your shape is a sphere hit 'Y', if it's a rectangular prism or cube, hit 'N'"
-read *, needs
 
-if(needs == 'Y' .or. needs == 'y') then
-    pi = 3.14159
+!for loops below
+i = 1
 
-    print *, "enter Radius: "
-    read *, radius
-   ! print *, "the length width and radius are: ", length, width, radius
+write(*,*) "Welcome to the Shape Calculator! This program will help you calculate the dimentions of a shape! Press Enter to conntiue!"    
+read (*,*) 
 
-    ! Perform calculations
+print *, "Is your shape a sphere? (Y/N)"
+read (*,*) needs
 
-    diameter = 2 * radius
-    area = 4 * pi * radius * radius
-    circumfrence = 2 * pi * radius
-    
-    print *, "Your dimensions are: Area: ", area, "Circumfrence: ", circumfrence, "Diameter: ", diameter
-    else
-        print *, "Enter length, width and height(in this order)"
-        read *, length, width, height
-
-        !Perform calculations
-
-       ! area = length * width
-        volume = length * width * height
+    !If the shape is a sphere then instantiate pi, read the sphere data file, perform the calculations and write the calculations into a binary file.
+    if(needs == 'Y' .or. needs == 'y') then
+        pi = 3.14159
+        write(*,*) "Reading Radius: "
+        open(unit = 10, file = "sphere.txt")
         
-        print *, "Your dimensions are: Volume: ", volume
-    
+            do !open the binary file and read the radius
+                read(10, *, iostat = ierr) radius 
+                open(unit = 20, file = "binary_sphere.bin", access = "stream", status= "replace", action = "write", iostat = ierr)
+                !open(20,file='',form='binary')
+                !check for errors
+                if(ierr > 0) then
+                    print *, "Error reading file"
+                    exit
+                else if(ierr < 0) then
+                    print *, "End of file reached"
+                    exit
+                else
+                    ! Perform calculations
+                    diameter = 2 * radius
+                    area = 4 * pi * radius * radius
+                    circumfrence = 2 * pi * radius
+                    !write the calculations to the binary file
+                    write(20, iostat=ierr) area, circumfrence, diameter                    
+                end if
+            end do
+        close(10)    
+        close(20)
+    else
+        !If the shape is not a sphere(cube), read the cube data file, perform calcuations and write the calculations into a binary file.
+        open(unit = 10, file = "cube.txt")
+        do  !open the binary file and read the dimentions
+            read(10, *, iostat = ierr) length, width, height
+                open(unit = 20, file = "binary_cube.bin", access = "stream", status= "replace", action = "write", iostat = ierr)
+            !check for errors
+            if(ierr > 0) then
+                print *, "Error reading file"
+                exit
+            else if(ierr < 0) then
+                print *, "End of file reached"
+                exit
+            else
+                ! Perform calculations
+                volume = length * width * height
+                !write the calculations to the binary file
+                write(20, iostat = ierr) volume
+                !print *, "Your volume is: ", volume
+            end if 
+        end do
+        close(10)
+        close(20)
 
-        !print *, "the length and width are: ", length, width
-end if
-
-
-
-!things to calculate area, volume, circumference, diameter, radius. 
-
-
-
+       
+    end if
 end program shapes
