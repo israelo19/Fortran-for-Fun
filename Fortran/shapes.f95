@@ -19,13 +19,16 @@ read (*,*)
 print *, "Is your shape a sphere? (Y/N)"
 read (*,*) needs
 
-    !If the shape is a sphere then instantiate pi, read the sphere data file and perform the calculations.
+    !If the shape is a sphere then instantiate pi, read the sphere data file, perform the calculations and write the calculations into a binary file.
     if(needs == 'Y' .or. needs == 'y') then
         pi = 3.14159
         write(*,*) "Reading Radius: "
         open(unit = 10, file = "sphere.txt")
-            do 
-                read(10, *, iostat = ierr) radius
+        
+            do !open the binary file and read the radius
+                read(10, *, iostat = ierr) radius 
+                open(unit = 20, file = "binary_sphere.bin")
+                !check for errors
                 if(ierr > 0) then
                     print *, "Error reading file"
                     exit
@@ -37,15 +40,19 @@ read (*,*) needs
                     diameter = 2 * radius
                     area = 4 * pi * radius * radius
                     circumfrence = 2 * pi * radius
-                    print *, "Your dimensions are: Area: ", area, "Circumfrence: ", circumfrence, "Diameter: ", diameter
+                    !write the calculations to the binary file
+                    write(20, *) area, circumfrence, diameter                    
                 end if
             end do
         close(10)    
+        close(20)
     else
-        !If the shape is not a sphere(cube), read the cube data file and perform calcuations.
+        !If the shape is not a sphere(cube), read the cube data file, perform calcuations and write the calculations into a binary file.
         open(unit = 10, file = "cube.txt")
-        do 
+        do  !open the binary file and read the dimentions
             read(10, *, iostat = ierr) length, width, height
+            open(unit = 20, file = "binary_cube.bin")
+            !check for errors
             if(ierr > 0) then
                 print *, "Error reading file"
                 exit
@@ -55,8 +62,14 @@ read (*,*) needs
             else
                 ! Perform calculations
                 volume = length * width * height
-                print *, "Your volume is: ", volume
-            end if
+                !write the calculations to the binary file
+                write(20, *) volume
+                !print *, "Your volume is: ", volume
+            end if 
         end do
+        close(10)
+        close(20)
+
+       
     end if
 end program shapes
