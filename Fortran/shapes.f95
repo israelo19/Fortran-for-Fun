@@ -9,7 +9,7 @@ real :: area, volume, height, circumfrence, diameter, radius, pi, length, width 
 integer :: i 
 character :: needs
 
-i =1
+i = 1
 
 write(*,*) "Welcome to the Shape Calculator! This program will help you calculate the dimentions of a shape! Press Enter to conntiue!"    
 read (*,*) 
@@ -47,6 +47,5 @@ else
     close(10)
 
 end if
-
 
 end program shapes
