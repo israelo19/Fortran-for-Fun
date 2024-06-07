@@ -27,7 +27,8 @@ read (*,*) needs
         
             do !open the binary file and read the radius
                 read(10, *, iostat = ierr) radius 
-                open(unit = 20, file = "binary_sphere.bin")
+                open(unit = 20, file = "binary_sphere.bin", access = "stream", status= "replace", action = "write", iostat = ierr)
+                !open(20,file='',form='binary')
                 !check for errors
                 if(ierr > 0) then
                     print *, "Error reading file"
@@ -41,7 +42,7 @@ read (*,*) needs
                     area = 4 * pi * radius * radius
                     circumfrence = 2 * pi * radius
                     !write the calculations to the binary file
-                    write(20, *) area, circumfrence, diameter                    
+                    write(20, iostat=ierr) area, circumfrence, diameter                    
                 end if
             end do
         close(10)    
@@ -51,7 +52,7 @@ read (*,*) needs
         open(unit = 10, file = "cube.txt")
         do  !open the binary file and read the dimentions
             read(10, *, iostat = ierr) length, width, height
-            open(unit = 20, file = "binary_cube.bin")
+                open(unit = 20, file = "binary_cube.bin", access = "stream", status= "replace", action = "write", iostat = ierr)
             !check for errors
             if(ierr > 0) then
                 print *, "Error reading file"
@@ -63,7 +64,7 @@ read (*,*) needs
                 ! Perform calculations
                 volume = length * width * height
                 !write the calculations to the binary file
-                write(20, *) volume
+                write(20, iostat = ierr) volume
                 !print *, "Your volume is: ", volume
             end if 
         end do
