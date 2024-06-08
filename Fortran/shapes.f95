@@ -11,7 +11,6 @@ integer :: i, ierr
 character :: needs
 
 !for loops below
-i = 1
 
 write(*,*) "Welcome to the Shape Calculator! This program will help you calculate the dimentions of a shape! Press Enter to conntiue!"    
 read (*,*) 
@@ -24,16 +23,17 @@ read (*,*) needs
         pi = 3.14159
         write(*,*) "Reading Radius: "
         open(unit = 10, file = "sphere.txt")
+        open(unit = 20, file = "binary_sphere.bin", access = "stream", status= "replace", action = "write", iostat = ierr)
+
         
             do !open the binary file and read the radius
                 read(10, *, iostat = ierr) radius 
-                open(unit = 20, file = "binary_sphere.bin", access = "stream", status= "replace", action = "write", iostat = ierr)
                 !open(20,file='',form='binary')
                 !check for errors
-                if(ierr > 0) then
+                if(ierr .gt. 0) then
                     print *, "Error reading file"
                     exit
-                else if(ierr < 0) then
+                else if(ierr .lt. 0) then
                     print *, "End of file reached"
                     exit
                 else
@@ -42,7 +42,9 @@ read (*,*) needs
                     area = 4 * pi * radius * radius
                     circumfrence = 2 * pi * radius
                     !write the calculations to the binary file
-                    write(20, iostat=ierr) area, circumfrence, diameter                    
+                    write(20, iostat=ierr) area, circumfrence, diameter  
+                    write(*,*) "Dimentions: ", area, circumfrence, diameter 
+                  
                 end if
             end do
         close(10)    
@@ -50,14 +52,15 @@ read (*,*) needs
     else
         !If the shape is not a sphere(cube), read the cube data file, perform calcuations and write the calculations into a binary file.
         open(unit = 10, file = "cube.txt")
+        open(unit = 20, file = "binary_cube.bin", access = "stream", status= "replace", action = "write", iostat = ierr)
+
         do  !open the binary file and read the dimentions
             read(10, *, iostat = ierr) length, width, height
-                open(unit = 20, file = "binary_cube.bin", access = "stream", status= "replace", action = "write", iostat = ierr)
             !check for errors
-            if(ierr > 0) then
+            if(ierr.gt.0) then
                 print *, "Error reading file"
                 exit
-            else if(ierr < 0) then
+            else if(ierr.lt.0) then
                 print *, "End of file reached"
                 exit
             else
@@ -65,6 +68,7 @@ read (*,*) needs
                 volume = length * width * height
                 !write the calculations to the binary file
                 write(20, iostat = ierr) volume
+                write(*,*) "Volume: ", volume 
                 !print *, "Your volume is: ", volume
             end if 
         end do
