@@ -21,19 +21,20 @@ implicit none
 
 ! this is with the seed
 
-real :: x, y
-integer :: i, n
+real :: x
+integer :: i
 integer :: seed
 integer :: upper_lim = 100, lower_lim = -100
 seed = 123456789
 
 call srand(seed)
 
-open (unit=10, file='random.dat', status='unknown')
-do i = 1, 100
+open (unit=10, file='random_nums.dat', action='write', position='append')
+do i = 1, 1000000
     x = lower_lim + (upper_lim-lower_lim)*rand()
-  !  y = lower_lim + (upper_lim-lower_lim)*rand()
-    write(10,*)x
+    write(10,*) x
 end do 
+close(10)
 
 end program random
+
